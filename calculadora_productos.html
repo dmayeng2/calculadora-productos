@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Calculadora de Productos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+        }
+
+        .login-section, .main-section {
+            padding: 50px 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            color: #00f5ff;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            font-size: 1.3em;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #a0a0a0;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #2a2a2a;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #00f5ff;
+            background: #0f0f0f;
+            box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, #00f5ff 0%, #0080ff 100%);
+            color: #000;
+            padding: 18px 36px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 245, 255, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .error {
+            color: #ff3366;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .success {
+            color: #00ff88;
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .product-options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            padding: 20px;
+            background: #0f0f0f;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .checkbox-item:hover,
+        .radio-item:hover {
+            background: #1a1a1a;
+        }
+
+        .checkbox-item:last-child,
+        .radio-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-item input,
+        .radio-item input {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: #00f5ff;
+        }
+
+        .checkbox-item label,
+        .radio-item label {
+            margin-bottom: 0;
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            color: #d0d0d0;
+        }
+
+        .result-box {
+            background: #0f0f0f;
+            border: 2px solid #00f5ff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .result-box h3 {
+            color: #00f5ff;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+            color: #d0d0d0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.4em;
+            color: #00f5ff;
+            margin-top: 15px;
+            padding-top: 20px;
+            border-top: 2px solid #00f5ff;
+        }
+
+        .media-section {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .media-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 245, 255, 0.2);
+            border: 1px solid #2a2a2a;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 245, 255, 0.2);
+            border: 1px solid #2a2a2a;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 620px;
+            border: none;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ff3366 0%, #ff0044 100%);
+            color: #fff;
+            margin-top: 40px;
+        }
+
+        .logout-btn:hover {
+            box-shadow: 0 12px 40px rgba(255, 51, 102, 0.4);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        ::placeholder {
+            color: #606060;
+        }
+
+        @media (max-width: 768px) {
+            .login-section, .main-section {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sección de Login -->
+        <div id="loginSection" class="login-section">
+            <h1>Sistema de Cálculo de Productos</h1>
+            <div class="form-group">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" placeholder="Ingrese su usuario">
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" placeholder="Ingrese su contraseña">
+            </div>
+            <button onclick="login()">Iniciar Sesión</button>
+            <div id="loginError" class="error"></div>
+        </div>
+
+        <!-- Sección Principal -->
+        <div id="mainSection" class="main-section hidden">
+            <h1>Calculadora de Compras</h1>
+            
+            <div class="media-section">
+                <img src="https://media.istockphoto.com/id/479520746/es/foto/ordenador-port%C3%A1til-con-pantalla-en-blanco-en-blanco.jpg?s=612x612&w=0&k=20&c=n5SDdluMvzRdvAGX3iZHnlU_MPj4yyDyyi_kgsjgocY=" alt="Laptop">
+            </div>
+
+            <h2>Seleccione sus productos:</h2>
+            
+            <!-- CheckBoxes para productos -->
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="laptop" value="800">
+                    <label for="laptop">Laptop - $800</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="mouse" value="25">
+                    <label for="mouse">Mouse - $25</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="teclado" value="50">
+                    <label for="teclado">Teclado - $50</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="monitor" value="300">
+                    <label for="monitor">Monitor - $300</label>
+                </div>
+            </div>
+
+            <!-- Radio buttons para método de envío -->
+            <h2>Método de envío:</h2>
+            <div class="radio-group">
+                <div class="radio-item">
+                    <input type="radio" id="standard" name="envio" value="10" checked>
+                    <label for="standard">Envío Estándar - $10</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="express" name="envio" value="25">
+                    <label for="express">Envío Express - $25</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="premium" name="envio" value="50">
+                    <label for="premium">Envío Premium - $50</label>
+                </div>
+            </div>
+
+            <!-- Select para cantidad de productos -->
+            <div class="form-group">
+                <label for="cantidad">Cantidad de cada producto:</label>
+                <select id="cantidad">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <!-- Text area para comentarios -->
+            <div class="form-group">
+                <label for="comentarios">Comentarios adicionales:</label>
+                <textarea id="comentarios" placeholder="Ingrese cualquier comentario sobre su pedido..."></textarea>
+            </div>
+
+            <!-- Botón calcular -->
+            <button onclick="calcularTotal()">Calcular Total</button>
+
+            <!-- Área de resultados -->
+            <div id="resultados" class="result-box hidden">
+                <h3>Resumen de su pedido:</h3>
+                <div id="detalles"></div>
+            </div>
+
+            <div class="media-section">
+                <div class="video-container">
+                    <iframe src="https://www.tiktok.com/embed/7387616120515087622" allowfullscreen scrolling="no"></iframe>
+                </div>
+            </div>
+
+            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
